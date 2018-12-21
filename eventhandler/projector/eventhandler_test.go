@@ -50,7 +50,7 @@ func TestEventHandler_CreateModel(t *testing.T) {
 	}
 	projector.newEntity = entity
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there shoud be no error:", err)
+		t.Error("there should be no error:", err)
 	}
 	if projector.event != event {
 		t.Error("the handled event should be correct:", projector.event)
@@ -87,7 +87,7 @@ func TestEventHandler_UpdateModel(t *testing.T) {
 		Content: "updated",
 	}
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there shoud be no error:", err)
+		t.Error("there should be no error:", err)
 	}
 	if projector.event != event {
 		t.Error("the handled event should be correct:", projector.event)
@@ -125,7 +125,7 @@ func TestEventHandler_UpdateModelWithVersion(t *testing.T) {
 		Content: "version 1",
 	}
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there shoud be no error:", err)
+		t.Error("there should be no error:", err)
 	}
 	if projector.event != event {
 		t.Error("the handled event should be correct:", projector.event)
@@ -135,6 +135,9 @@ func TestEventHandler_UpdateModelWithVersion(t *testing.T) {
 	}
 	if repo.Entity != projector.newEntity {
 		t.Error("the new entity should be correct:", repo.Entity)
+	}
+	if err := handler.HandleEvent(ctx, event); err != nil {
+		t.Error("there should be no error handling an old event:", err)
 	}
 }
 
@@ -174,7 +177,7 @@ func TestEventHandler_UpdateModelWithEventsOutOfOrder(t *testing.T) {
 		repo.Entity = newEntity
 	}()
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there shoud be no error:", err)
+		t.Error("there should be no error:", err)
 	}
 	if projector.event != event {
 		t.Error("the handled event should be correct:", projector.event)
@@ -208,7 +211,7 @@ func TestEventHandler_DeleteModel(t *testing.T) {
 	repo.Entity = entity
 	projector.newEntity = nil
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there shoud be no error:", err)
+		t.Error("there should be no error:", err)
 	}
 	if projector.event != event {
 		t.Error("the handled event should be correct:", projector.event)
@@ -244,7 +247,7 @@ func TestEventHandler_LoadError(t *testing.T) {
 		Namespace: eh.NamespaceFromContext(ctx),
 	}
 	if err := handler.HandleEvent(ctx, event); !reflect.DeepEqual(err, expectedErr) {
-		t.Error("there shoud be an error:", err)
+		t.Error("there should be an error:", err)
 	}
 }
 
@@ -271,7 +274,7 @@ func TestEventHandler_SaveError(t *testing.T) {
 		Namespace: eh.NamespaceFromContext(ctx),
 	}
 	if err := handler.HandleEvent(ctx, event); !reflect.DeepEqual(err, expectedErr) {
-		t.Error("there shoud be an error:", err)
+		t.Error("there should be an error:", err)
 	}
 }
 
@@ -298,7 +301,7 @@ func TestEventHandler_ProjectError(t *testing.T) {
 		Namespace: eh.NamespaceFromContext(ctx),
 	}
 	if err := handler.HandleEvent(ctx, event); !reflect.DeepEqual(err, expectedErr) {
-		t.Error("there shoud be an error:", err)
+		t.Error("there should be an error:", err)
 	}
 }
 

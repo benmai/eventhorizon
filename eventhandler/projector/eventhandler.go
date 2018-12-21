@@ -103,7 +103,14 @@ func (h *EventHandler) HandleEvent(ctx context.Context, event eh.Event) error {
 
 	// The entity should be one version behind the event.
 	if entity, ok := entity.(eh.Versionable); ok {
-		if entity.AggregateVersion()+1 != event.Version() {
+		nextVersion := entity.AggregateVersion() + 1
+
+		// If the projection has already advanced past this event
+		// version (e.g. the event handler was called with the same
+		// event twice) then return nil.
+		if nextVersion > event.Version() {
+			return nil
+		} else if nextVersion != event.Version() {
 			return Error{
 				Err:       eh.ErrIncorrectEntityVersion,
 				Namespace: eh.NamespaceFromContext(ctx),
