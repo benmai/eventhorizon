@@ -137,7 +137,16 @@ func TestEventHandler_UpdateModelWithVersion(t *testing.T) {
 		t.Error("the new entity should be correct:", repo.Entity)
 	}
 	if err := handler.HandleEvent(ctx, event); err != nil {
-		t.Error("there should be no error handling an old event:", err)
+		t.Error("there should be no error handling the same event twice:", err)
+	}
+	if projector.event != event {
+		t.Error("the handled event should be correct:", projector.event)
+	}
+	if projector.entity != entity {
+		t.Error("the entity should be correct:", projector.entity)
+	}
+	if repo.Entity != projector.newEntity {
+		t.Error("the new entity should be correct:", repo.Entity)
 	}
 }
 
